@@ -1,28 +1,59 @@
+#import all the things
 import pygame
 from constants import *
 from logger import log_state
 from player import Player
 
+#initialize pygame
 pygame.init()
+
+#set the screen and clock parameters
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 dt = 0
+
+#making the groups
+updatable = pygame.sprite.Group()
+drawable = pygame.sprite.Group()
+
+#assigning groups to Player class
+Player.containers = (updatable, drawable)
+
+#create player instance
 player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
+#start loop
 done = False
 while not done:
+    
+    #make sure I can quit out again
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+    
+    #logging!
     log_state()
+    
+    #make screen go black
     screen.fill("black")
-    player.update(dt)
-    player.draw(screen)
+    
+    #updating everything in updatable
+    updatable.update(dt)
+    
+    # drawing everything in drawable
+    for item in drawable:
+        item.draw(screen)
+    
+    #update the screen
     pygame.display.flip()
+    
+    #set FPS
     clock.tick(60)
+    
+    #change FPS to frames per miliseconds
     dt = clock.tick(60) / 1000
     
-
+#start main
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")

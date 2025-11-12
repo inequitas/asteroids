@@ -30,7 +30,7 @@ AsteroidField.containers = (updatable)
 Shot.containers = (updatable, drawable)
 
 #create player instance
-player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, shots)
 field = AsteroidField()
 
 #start loop
@@ -56,6 +56,15 @@ while not done:
             log_event("player_hit")
             print("Game over!")
             sys.exit()
+    
+    for asteroid in asteroids:
+        for shot in shots:
+            if asteroid.collides_with(shot):
+                log_event("asteroid_shot")
+                shot.kill()
+                asteroid.split()
+    
+
         
 
     # drawing everything in drawable
